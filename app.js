@@ -39,17 +39,41 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
         roundScore += dice;
         document.querySelector('#current-' + activePlayer).textContent = roundScore;
     } else {
-        //Next player
-        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active'); //Current player is not active anymore
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0; //Ternary operator to set the next player
-        document.querySelector('.player-' + activePlayer + '-panel').classList.add('active'); //Next player becomes active
-
-        //Reset roundscores
-        roundScore = 0;
-        document.getElementById('current-0').textContent = '0';
-        document.getElementById('current-1').textContent = '0';
-
-        //Make dice hidden so next player has starts clean
-        document.querySelector('.dice').style.display = 'none';
+        nextPlayer();
     }
 });
+
+//Add the current score to the global score
+document.querySelector('.btn-hold').addEventListener('click', function () {
+    // Add current score to global score
+    scores[activePlayer] += roundScore;
+
+    // Update the UI
+    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+
+    // Check if player won the game
+    if (scores[activePlayer] >= 20) {
+        document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+        document.querySelector('.dice').style.display = 'none';
+        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');        
+    } else {
+        //next player
+        nextPlayer();
+    }
+});
+
+function nextPlayer() {
+    //Next player
+    document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active'); //Current player is not active anymore
+    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0; //Ternary operator to set the next player
+    document.querySelector('.player-' + activePlayer + '-panel').classList.add('active'); //Next player becomes active
+
+    //Reset roundscores
+    roundScore = 0;
+    document.getElementById('current-0').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+
+    //Make dice hidden so next player has starts clean
+    document.querySelector('.dice').style.display = 'none';
+}
