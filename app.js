@@ -59,6 +59,12 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
         // Get the winning score from the input field
         var winningScore = document.getElementById('winning-score').value;
 
+        // Undefined, 0, null or '' are COERCED to false
+        // Everything else COERCED to true
+        if (!winningScore) {
+            winningScore = 100;
+        }
+
         // Check if player won the game
         if (scores[activePlayer] >= winningScore) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
