@@ -21,11 +21,11 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
         var secondDice = Math.floor(Math.random() * 6) + 1;
 
         // Display the result
-        var firstDiceDom = document.querySelector('.dice'); //Save the reference to the DOM element
+        var firstDiceDom = document.getElementById('dice-1'); //Save the reference to the DOM element
         firstDiceDom.style.display = 'block';
         firstDiceDom.src = 'dice-' + firstDice + '.png';
 
-        var secondDiceDom = document.querySelector('.secondDice'); //Save the reference to the DOM element
+        var secondDiceDom = document.getElementById('dice-2'); //Save the reference to the DOM element
         secondDiceDom.style.display = 'block';
         secondDiceDom.src = 'dice-' + secondDice + '.png';
 
@@ -92,9 +92,8 @@ function nextPlayer() {
     document.getElementById('current-0').textContent = '0';
     document.getElementById('current-1').textContent = '0';
 
-    //Make dice hidden so next player has clean start
-    document.querySelector('.dice').style.display = 'none';
-    document.querySelector('.secondDice').style.display = 'none';
+    //Make dices hidden so next player has clean start
+    hideDices();
 
     //Reset previous roll
     previousRollScore = 0;
@@ -126,7 +125,7 @@ function init() {
 }
 
 function hideDices() {
-    document.querySelector('.dice').style.display = 'none';
-    document.querySelector('.secondDice').style.display = 'none';
+    document.getElementById('dice-1').style.display = 'none';
+    document.getElementById('dice-2').style.display = 'none';
 }
 
