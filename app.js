@@ -15,29 +15,34 @@ init();
 document.querySelector('.btn-roll').addEventListener('click', function () {
     // Check if game is still being played 
     if (gamePlaying) {
+
         // Random number
-        var dice = Math.floor(Math.random() * 6) + 1; //Generate a random number between 1 and 6 for the dice images
+        var firstDice = Math.floor(Math.random() * 6) + 1; //Generate a random number between 1 and 6 for the dice images
+        var secondDice = Math.floor(Math.random() * 6) + 1;
 
         // Display the result
-        var diceDOM = document.querySelector('.dice'); //Save the reference to the DOM element
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+        var firstDiceDom = document.querySelector('.dice'); //Save the reference to the DOM element
+        firstDiceDom.style.display = 'block';
+        firstDiceDom.src = 'dice-' + firstDice + '.png';
 
+        var secondDiceDom = document.querySelector('.secondDice'); //Save the reference to the DOM element
+        secondDiceDom.style.display = 'block';
+        secondDiceDom.src = 'dice-' + secondDice + '.png';
 
         // Update the round score IF the rolled number was NOT a 1
-        if (dice !== 1) {
-            if (previousRollScore === 6 && dice === 6) { // IF Two 6 in a row
+        if (firstDice !== 1 && secondDice !== 1) {
+            if (previousRollScore === 6 && firstDice === 6) { // IF Two 6 in a row
                 // Reset ENTIRE score and next player's turn
                 scores[activePlayer] = 0;
                 document.getElementById('score-' + activePlayer).textContent = '0';
                 nextPlayer();
             } else {
                 //Add score
-                roundScore += dice;
+                roundScore += firstDice + secondDice;
                 document.querySelector('#current-' + activePlayer).textContent = roundScore;
 
                 //Previous roll
-                previousRollScore = dice;
+                previousRollScore = firstDice;
             }
         } else {
             nextPlayer();
@@ -54,10 +59,13 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
         // Update the UI
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
+        // Get the winning score from the input field
+        var winningScore = document.getElementById('winning-score').value;
+
         // Check if player won the game
-        if (scores[activePlayer] >= 20) {
+        if (scores[activePlayer] >= winningScore) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
-            document.querySelector('.dice').style.display = 'none';
+            hideDices();
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
             gamePlaying = false; // The game is over, the user has to click the new game button
@@ -83,6 +91,7 @@ function nextPlayer() {
 
     //Make dice hidden so next player has clean start
     document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.secondDice').style.display = 'none';
 
     //Reset previous roll
     previousRollScore = 0;
@@ -95,8 +104,8 @@ function init() {
     gamePlaying = true; //Game is being played
     previousRollScore = 0;
 
-    //Hide the dice
-    document.querySelector('.dice').style.display = 'none';
+    //Hide the dices
+    hideDices();
 
     //Set all DOM to beginning state
     document.getElementById('score-0').textContent = '0';
@@ -111,5 +120,10 @@ function init() {
     document.querySelector('.player-0-panel').classList.remove('active');
     document.querySelector('.player-1-panel').classList.remove('active');
     document.querySelector('.player-0-panel').classList.add('active');
+}
+
+function hideDices() {
+    document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.secondDice').style.display = 'none';
 }
 
