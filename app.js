@@ -8,26 +8,37 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 */
 
-var scores, roundScore, activePlayer, gamePlaying;
+var scores, roundScore, activePlayer, gamePlaying, previousRollScore;
 
 init();
 
 document.querySelector('.btn-roll').addEventListener('click', function () {
     // Check if game is still being played 
     if (gamePlaying) {
-        //1. Random number
+        // Random number
         var dice = Math.floor(Math.random() * 6) + 1; //Generate a random number between 1 and 6 for the dice images
 
-        //2. Display the result
+        // Display the result
         var diceDOM = document.querySelector('.dice'); //Save the reference to the DOM element
         diceDOM.style.display = 'block';
         diceDOM.src = 'dice-' + dice + '.png';
 
-        //3. Update the round IF the rolled number was NOT a 1
+
+        // Update the round score IF the rolled number was NOT a 1
         if (dice !== 1) {
-            //Add score
-            roundScore += dice;
-            document.querySelector('#current-' + activePlayer).textContent = roundScore;
+            if (previousRollScore === 6 && dice === 6) { // IF Two 6 in a row
+                // Reset ENTIRE score and next player's turn
+                scores[activePlayer] = 0;
+                document.getElementById('score-' + activePlayer).textContent = '0';
+                nextPlayer();
+            } else {
+                //Add score
+                roundScore += dice;
+                document.querySelector('#current-' + activePlayer).textContent = roundScore;
+
+                //Previous roll
+                previousRollScore = dice;
+            }
         } else {
             nextPlayer();
         }
@@ -70,15 +81,19 @@ function nextPlayer() {
     document.getElementById('current-0').textContent = '0';
     document.getElementById('current-1').textContent = '0';
 
-    //Make dice hidden so next player has starts clean
+    //Make dice hidden so next player has clean start
     document.querySelector('.dice').style.display = 'none';
+
+    //Reset previous roll
+    previousRollScore = 0;
 }
 
 function init() {
     scores = [0, 0]; //Global scores per player
     roundScore = 0; //Round score for a player
     activePlayer = 0; //active player 0 = player 1 and 1 = player 2
-    gamePlaying = true;
+    gamePlaying = true; //Game is being played
+    previousRollScore = 0;
 
     //Hide the dice
     document.querySelector('.dice').style.display = 'none';
