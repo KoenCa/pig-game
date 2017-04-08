@@ -29,24 +29,21 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
         secondDiceDom.style.display = 'block';
         secondDiceDom.src = 'dice-' + secondDice + '.png';
 
-        // Update the round score IF the rolled number was NOT a 1
-        if (firstDice !== 1 && secondDice !== 1) {
-            if (previousRollScore === 6 && firstDice === 6) { // IF Two 6 in a row
-                // Reset ENTIRE score and next player's turn
-                scores[activePlayer] = 0;
-                document.getElementById('score-' + activePlayer).textContent = '0';
-                nextPlayer();
-            } else {
-                //Add score
-                roundScore += firstDice + secondDice;
-                document.querySelector('#current-' + activePlayer).textContent = roundScore;
-
-                //Previous roll
-                previousRollScore = firstDice;
-            }
+        if (previousRollScore === 6 && firstDice === 6) { // IF Two 6 in a row
+            // Reset ENTIRE score and next player's turn
+            scores[activePlayer] = 0;
+            document.getElementById('score-' + activePlayer).textContent = '0';
+            nextPlayer();
+        } else if (firstDice !== 1 && secondDice !== 1) { // Update the round score IF the rolled number was NOT a 1
+            //Add score
+            roundScore += firstDice + secondDice;
+            document.querySelector('#current-' + activePlayer).textContent = roundScore;
         } else {
             nextPlayer();
         }
+
+        //Previous roll
+        previousRollScore = firstDice;
     }
 });
 
